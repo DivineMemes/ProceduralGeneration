@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
 [Serializable]
-public class IntRange : MonoBehaviour
+public class IntRange
 {
     public int Min;
     public int Max;

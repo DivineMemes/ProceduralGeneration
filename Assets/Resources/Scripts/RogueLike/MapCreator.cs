@@ -10,8 +10,8 @@ public class MapCreator : MonoBehaviour
         Wall, Floor,
     }
 
-    public int columns = 100;
-    public int rows = 100;
+    public int columns;
+    public int rows;
     public IntRange numRooms = new IntRange(15, 20);
     public IntRange roomWidth = new IntRange(3, 10);
     public IntRange roomHeight = new IntRange(3, 10);
@@ -20,6 +20,9 @@ public class MapCreator : MonoBehaviour
     public GameObject[] floorTiles;
     public GameObject[] wallTiles;
     public GameObject[] outerWallTiles;
+    public GameObject portalOfHeros;
+    public GameObject portalOfCowards;
+
 
     private TileType[][] tiles;
     private Room[] rooms;
@@ -27,19 +30,28 @@ public class MapCreator : MonoBehaviour
     private GameObject boardHolder;
 
     // Use this for initialization
-    void Start () {
+    void Start()
+    {
         boardHolder = new GameObject("BoardHolder");
-	}
+        SetupTilesArray();
+        CreateRoomsAndCorridors();
+        SetTilesValuesForRooms();
+        SetTilesValuesForCorridors();
+        InstantiateTiles();
+        InstantiateOuterWalls();
+        RemoveColliders();
+
+    }
 
     void SetupTilesArray()
     {
         tiles = new TileType[columns][];
-        for(int i = 0; i < tiles.Length; i++)
+        for (int i = 0; i < tiles.Length; i++)
         {
             tiles[i] = new TileType[rows];
         }
     }
-	
+
     void CreateRoomsAndCorridors()
     {
         rooms = new Room[numRooms.Random];
@@ -51,15 +63,20 @@ public class MapCreator : MonoBehaviour
         rooms[0].SetupRoom(roomWidth, roomHeight, columns, rows);
         corridors[0].SetupCorridor(rooms[0], corridorLengths, roomWidth, roomHeight, columns, rows, true);
 
-        for(int i = 1; i < rooms.Length; i++)
+        for (int i = 1; i < rooms.Length; i++)
         {
             rooms[i] = new Room();
             rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[i - 1]);
 
-            if(i < corridors.Length)
+            if (i < corridors.Length)
             {
                 corridors[i] = new Corridor();
                 corridors[i].SetupCorridor(rooms[i], corridorLengths, roomWidth, roomHeight, columns, rows, false);
+            }
+
+            if (i == rooms.Length - 1)
+            {
+                Instantiate()
             }
         }
     }
@@ -67,30 +84,33 @@ public class MapCreator : MonoBehaviour
 
     void SetTilesValuesForRooms()
     {
-        for(int i = 0; i < rooms.Length; i++)
+        for (int i = 0; i < rooms.Length; i++)
         {
             Room currentRoom = rooms[i];
+            
 
-            for(int j = 0; j < currentRoom.roomWidth; j++)
+            for (int j = 0; j < currentRoom.roomWidth; j++)
             {
                 int xCoord = currentRoom.xPos + j;
-                for(int k = 0; k < currentRoom.roomHeight; k++)
+                for (int k = 0; k < currentRoom.roomHeight; k++)
                 {
                     int yCoord = currentRoom.yPos + k;
                     tiles[xCoord][yCoord] = TileType.Floor;
                 }
             }
+            if()
         }
+
     }
 
 
     void SetTilesValuesForCorridors()
     {
-        for(int i = 0; i < corridors.Length; i++)
+        for (int i = 0; i < corridors.Length; i++)
         {
             Corridor currentCorridor = corridors[i];
 
-            for(int j = 0; j < currentCorridor.corridorLength; j++)
+            for (int j = 0; j < currentCorridor.corridorLength; j++)
             {
 
                 int xCoord = currentCorridor.startXPos;
@@ -120,15 +140,15 @@ public class MapCreator : MonoBehaviour
 
     void InstantiateTiles()
     {
-        for(int i = 0; i < tiles.Length; i++)
+        for (int i = 0; i < tiles.Length; i++)
         {
-            for(int j = 0; j< tiles[i].Length; j++)
+            for (int j = 0; j < tiles[i].Length; j++)
             {
                 InstantiateFromArray(floorTiles, i, j);
                 {
-                    if(tiles[i][j] == TileType.Wall)
+                    if (tiles[i][j] == TileType.Wall)
                     {
-                        intstantiateFromArray(wallTiles, i, j);
+                        InstantiateFromArray(wallTiles, i, j);
                     }
                 }
             }
@@ -143,11 +163,62 @@ public class MapCreator : MonoBehaviour
 
 
         InstantiateVerticalOuterWall(leftEdgeX, bottomEdgeY, topEdgeY);
-        InstantiateVerticalOuterWall(reftEdgeX, bottomEdgeY, topEdgeY);
+        InstantiateVerticalOuterWall(rightEdgeX, bottomEdgeY, topEdgeY);
 
-        InstantiateHorizontalOuterWall(leftEdgeX +1f, rightEdgeX -1f, bottomEdgeY);
-        InstantiateHorizontalOuterWall(leftEdgeX +1f, rightEdgeX - 1f, topEdgeY);
+        InstantiateHorizontalOuterWall(leftEdgeX + 1f, rightEdgeX - 1f, bottomEdgeY);
+        InstantiateHorizontalOuterWall(leftEdgeX + 1f, rightEdgeX - 1f, topEdgeY);
 
 
+    }
+
+    void InstantiateVerticalOuterWall(float xCoord, float startingY, float endingY)
+    {
+        float currentY = startingY;
+
+        while (currentY <= endingY)
+        {
+            InstantiateFromArray(outerWallTiles, xCoord, currentY);
+
+            currentY++;
+        }
+    }
+
+    void InstantiateHorizontalOuterWall(float startingX, float endingX, float yCoord)
+    {
+        float currentX = startingX;
+
+        while (currentX <= endingX)
+        {
+            InstantiateFromArray(outerWallTiles, currentX, yCoord);
+
+            currentX++;
+        }
+    }
+
+
+    void InstantiateFromArray(GameObject[] prefabs, float xCoord, float yCoord)
+    {
+        int randomIndex = Random.Range(0, prefabs.Length);
+
+        Vector3 position = new Vector3(xCoord, 0f, yCoord);
+
+        GameObject tileInstance = Instantiate(prefabs[randomIndex], position, Quaternion.identity) as GameObject;
+
+        tileInstance.transform.parent = boardHolder.transform;
+    }
+
+
+    void RemoveColliders()
+    {
+        for (int i = 0; i < tiles.Length; i++)
+        {
+            for (int j = 0; j < tiles[i].Length; j++)
+            {
+                if (tiles[i][j] == TileType.Floor)
+                {
+                    
+                }
+            }
+        }
     }
 }

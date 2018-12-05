@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 public enum Direction
@@ -8,7 +6,7 @@ public enum Direction
     North,East,South,West,
 }
 
-public class Corridor : MonoBehaviour
+public class Corridor
 {
     public int startXPos;
     public int startYPos;
