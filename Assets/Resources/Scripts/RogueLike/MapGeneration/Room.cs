@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 
+[System.Serializable]
 public class Room
 {
     public int xPos;
@@ -30,15 +31,16 @@ public class Room
         switch (corridor.direction)
         {
             case Direction.North:
-                roomHeight = Mathf.Clamp(roomHeight, 1, rows - corridor.EndPositionX);
+                roomHeight = Mathf.Clamp(roomHeight, 1, rows - corridor.EndPositionY);
                 yPos = corridor.EndPositionY;
-
                 xPos = Random.Range(corridor.EndPositionX - roomWidth + 1, corridor.EndPositionX);
+                xPos = Mathf.Clamp(xPos, 0, columns - roomWidth);
                 break;
             case Direction.East:
                 roomWidth = Mathf.Clamp(roomWidth, 1, columns - corridor.EndPositionX);
                 xPos = corridor.EndPositionX;
                 yPos = Random.Range(corridor.EndPositionY - roomHeight + 1, corridor.EndPositionY);
+                yPos = Mathf.Clamp(yPos, 0, rows - roomHeight);
                 break;
             case Direction.South:
                 roomHeight = Mathf.Clamp(roomHeight, 1, corridor.EndPositionY);
@@ -49,7 +51,6 @@ public class Room
             case Direction.West:
                 roomWidth = Mathf.Clamp(roomWidth, 1, corridor.EndPositionX);
                 xPos = corridor.EndPositionX - roomWidth + 1;
-
                 yPos = Random.Range(corridor.EndPositionY - roomHeight + 1, corridor.EndPositionY);
                 yPos = Mathf.Clamp(yPos, 0, rows - roomHeight);
                 break;

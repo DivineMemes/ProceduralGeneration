@@ -22,6 +22,7 @@ public class MapCreator : MonoBehaviour
     public GameObject[] outerWallTiles;
     public GameObject portalOfHeros;
     public GameObject portalOfCowards;
+    public GameObject Player;
 
 
     private TileType[][] tiles;
@@ -73,17 +74,22 @@ public class MapCreator : MonoBehaviour
                 corridors[i] = new Corridor();
                 corridors[i].SetupCorridor(rooms[i], corridorLengths, roomWidth, roomHeight, columns, rows, false);
             }
-
+            if(i == rooms.Length - rooms.Length + 1)
+            {
+                Vector3 PlayerPos = new Vector3(rooms[i].xPos, 0.5f, rooms[i].yPos);
+                Instantiate(Player, PlayerPos, Quaternion.identity);
+            }
             if (i == rooms.Length - 1)
             {
-                Instantiate()
+                Vector3 endportal = new Vector3(rooms[i].xPos, 0.5f, rooms[i].yPos);
+                Instantiate(portalOfHeros, endportal, Quaternion.identity);
             }
         }
     }
 
 
     void SetTilesValuesForRooms()
-    {
+    {//rooms are calulated from the lower left tile of the room
         for (int i = 0; i < rooms.Length; i++)
         {
             Room currentRoom = rooms[i];
@@ -95,10 +101,18 @@ public class MapCreator : MonoBehaviour
                 for (int k = 0; k < currentRoom.roomHeight; k++)
                 {
                     int yCoord = currentRoom.yPos + k;
-                    tiles[xCoord][yCoord] = TileType.Floor;
+                    try
+                    {
+
+                        tiles[xCoord][yCoord] = TileType.Floor;
+
+                    }
+                    catch
+                    {
+                        Debug.Log("tried for rooms " + xCoord + ", " + yCoord);
+                    }
                 }
             }
-            if()
         }
 
     }
@@ -131,7 +145,15 @@ public class MapCreator : MonoBehaviour
                         xCoord -= j;
                         break;
                 }
-                tiles[xCoord][yCoord] = TileType.Floor;
+                try
+                {
+
+                    tiles[xCoord][yCoord] = TileType.Floor;
+                }
+                catch
+                {
+                    Debug.Log("tried for corridors " + xCoord + ", " + yCoord);
+                }
             }
         }
     }

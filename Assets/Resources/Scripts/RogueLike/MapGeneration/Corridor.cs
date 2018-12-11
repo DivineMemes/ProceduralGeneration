@@ -55,9 +55,7 @@ public class Corridor
             direction = (Direction)directionInt;
         }
         corridorLength = length.Random;
-
         int maxLength = length.Max;
-
         switch(direction)
         {
             case Direction.North:
@@ -80,8 +78,8 @@ public class Corridor
                 startYPos = Random.Range(room.yPos, room.yPos + room.roomHeight);
                 maxLength = startXPos - roomWidth.Min;
                 break;
-
         }
+        corridorLength = Mathf.Clamp(corridorLength, 1, maxLength);
     }
    
 }
