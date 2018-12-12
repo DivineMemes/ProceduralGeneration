@@ -101,15 +101,8 @@ public class MapCreator : MonoBehaviour
                 for (int k = 0; k < currentRoom.roomHeight; k++)
                 {
                     int yCoord = currentRoom.yPos + k;
-                    try
                     {
-
                         tiles[xCoord][yCoord] = TileType.Floor;
-
-                    }
-                    catch
-                    {
-                        Debug.Log("tried for rooms " + xCoord + ", " + yCoord);
                     }
                 }
             }
