@@ -140,8 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a8d366ccd6283b41bfc2fd9f212738a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 100
-  rows: 100
+  columns: 50
+  rows: 50
   numRooms:
     Min: 15
     Max: 20
@@ -167,6 +167,7 @@ MonoBehaviour:
     type: 2}
   portalOfCowards: {fileID: 0}
   Player: {fileID: 1922051634043976, guid: baf3a0fb0c7bab64586ada43d7abc868, type: 2}
+  Enemy: {fileID: 1589854739326758, guid: ce86514c82c9d754c92ce4a836798e48, type: 2}
 --- !u!4 &1172210798
 Transform:
   m_ObjectHideFlags: 0

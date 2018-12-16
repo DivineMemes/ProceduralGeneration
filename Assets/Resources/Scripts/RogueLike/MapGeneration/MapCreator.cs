@@ -23,6 +23,7 @@ public class MapCreator : MonoBehaviour
     public GameObject portalOfHeros;
     public GameObject portalOfCowards;
     public GameObject Player;
+    public GameObject Enemy;
 
 
     private TileType[][] tiles;
@@ -40,7 +41,7 @@ public class MapCreator : MonoBehaviour
         SetTilesValuesForCorridors();
         InstantiateTiles();
         InstantiateOuterWalls();
-        RemoveColliders();
+        //RemoveColliders();
 
     }
 
@@ -69,21 +70,39 @@ public class MapCreator : MonoBehaviour
             rooms[i] = new Room();
             rooms[i].SetupRoom(roomWidth, roomHeight, columns, rows, corridors[i - 1]);
 
+            //spawn player
+            if (i == 1/*.Length - rooms.Length + 1*/)
+            {
+                Vector3 PlayerPos = new Vector3(rooms[0].xPos, 0.5f, rooms[0].yPos);
+                Instantiate(Player, PlayerPos, Quaternion.identity);
+            }
+
+            //spawn enemies
+            if(i > 0)
+            {
+                int randVal = Random.Range(1, 5);
+                var gos = new GameObject[randVal];
+                Vector3 enemyPos = new Vector3(rooms[i].xPos, .25f, rooms[i].yPos);
+
+                for(int j = 0; j < gos.Length; j++)
+                {
+                    Instantiate(Enemy, enemyPos, Quaternion.identity);
+                }
+            }
+
+            //spawn corridors
             if (i < corridors.Length)
             {
                 corridors[i] = new Corridor();
                 corridors[i].SetupCorridor(rooms[i], corridorLengths, roomWidth, roomHeight, columns, rows, false);
             }
-            if(i == rooms.Length - rooms.Length + 1)
-            {
-                Vector3 PlayerPos = new Vector3(rooms[i].xPos, 0.5f, rooms[i].yPos);
-                Instantiate(Player, PlayerPos, Quaternion.identity);
-            }
+            //spawn endportals
             if (i == rooms.Length - 1)
             {
                 Vector3 endportal = new Vector3(rooms[i].xPos, 0.5f, rooms[i].yPos);
                 Instantiate(portalOfHeros, endportal, Quaternion.identity);
             }
+
         }
     }
 
@@ -123,6 +142,7 @@ public class MapCreator : MonoBehaviour
                 int xCoord = currentCorridor.startXPos;
                 int yCoord = currentCorridor.startYPos;
 
+                //prevents corridors from doubling back in on themself creating a singular blob of rooms
                 switch (currentCorridor.direction)
                 {
                     case Direction.North:
@@ -223,17 +243,17 @@ public class MapCreator : MonoBehaviour
     }
 
 
-    void RemoveColliders()
-    {
-        for (int i = 0; i < tiles.Length; i++)
-        {
-            for (int j = 0; j < tiles[i].Length; j++)
-            {
-                if (tiles[i][j] == TileType.Floor)
-                {
+    //void RemoveColliders()
+    //{
+    //    for (int i = 0; i < tiles.Length; i++)
+    //    {
+    //        for (int j = 0; j < tiles[i].Length; j++)
+    //        {
+    //            if (tiles[i][j] == TileType.Floor)
+    //            {
                     
-                }
-            }
-        }
-    }
+    //            }
+    //        }
+    //    }
+    //}
 }

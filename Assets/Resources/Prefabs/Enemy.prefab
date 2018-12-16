@@ -24,7 +24,7 @@ GameObject:
   - component: {fileID: 135796527590554584}
   - component: {fileID: 114386594393763568}
   - component: {fileID: 54590117792366078}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 29ee54895474e6f4ba8aa753f479e8c7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,8 +99,8 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
-  m_CollisionDetection: 0
+  m_Constraints: 116
+  m_CollisionDetection: 2
 --- !u!114 &114386594393763568
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -112,9 +112,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae315404d8702b1498eea2a3226e0d41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 5
+  currentHealth: 0
+  Player: {fileID: 4033998078972788, guid: baf3a0fb0c7bab64586ada43d7abc868, type: 2}
+  radius: 2
   recalc: 0.5
   wanderSpeed: 5
+  chaseSpeed: 2
+  detection: 5
   timer: 0
 --- !u!135 &135796527590554584
 SphereCollider:
