@@ -48,7 +48,8 @@ public class Controller : MonoBehaviour
         {
             timer = true;
             GameObject spawnedProjectile = Instantiate(projectile, gameObject.transform.position, Quaternion.identity);
-            spawnedProjectile.transform.LookAt(pPoint);
+            Vector3 target = new Vector3(pPoint.x, gameObject.transform.position.y, pPoint.z);
+            spawnedProjectile.transform.LookAt(target);
             
             spawnedProjectile.GetComponent<Rigidbody>().AddForce(spawnedProjectile.transform.forward * shotSpeed);
             //spawnedProjectile.GetComponent<Rigidbody>().AddForce(heading, ForceMode.Impulse);
